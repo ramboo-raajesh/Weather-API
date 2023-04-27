@@ -1,3 +1,3 @@
 # API
 
-Scraping Flipkart Wesite for Product name and Price
+Getting raw data from Open Weather and providing useful format to the end user
