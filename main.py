@@ -1,25 +1,29 @@
+import os
 import requests
 
-#asking user to enter the location
-print("Which city you want to see the weather")
-city = input()
+city = input("Enter the city: ")
 
-#creating full URL with user's creditionals
 params = {
   'access_key': '02aee7fd5aed7f3acf3f6b9e15d883b0',
   'query': city
 }
 
 api_result = requests.get('http://api.weatherstack.com/current', params)
-api_response = api_result.json()
 
-#Printing the short report
-print("In {} the tempreature is: {}C".format(api_response['location']['name'],api_response['current']['temperature']))
+try:
+    # Make the API request and parse the response
+    response = api_result
+    response.raise_for_status()  # raise an exception if the response status code is not 200
+    data = response.json()
 
-#prompting for further details
-print("Do you wanna see further details...! yes/no")
-details =  input()
-if details == "yes":
-    print(api_response)
-else:
-    pass
+    # Extract the weather information and print it to the console
+    location = data['location']['name']
+    temperature = data['current']['temperature']
+    print(f"In {location} the temperature is: {temperature} C")
+
+except requests.exceptions.HTTPError as e:
+    print(f"HTTP error: {e}")
+except requests.exceptions.RequestException as e:
+    print(f"Error: {e}")
+except KeyError as e:
+    print(f"Response error: {e} key not found in response")
