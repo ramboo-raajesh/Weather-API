@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+    <style>
+      /* Your CSS styles here */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      input[type="text"] {
+        padding: 8px;
+        width: 100%;
+        border: none;
+        border-radius: 4px;
+        margin-bottom: 10px;
+      }
+
+      input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .weather-data {
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Weather App</h1>
+      <form onsubmit="getWeatherData(); return false;">
+        <label for="city">Enter city name:</label>
+        <br>
+        <input type="text" id="city" name="city" required>
+        <br>
+        <input type="submit" value="Get Weather">
+      </form>
+      <div id="weather-data" class="weather-data"></div>
+    </div>
+    <script>
+      function getWeatherData() {
+        var city = document.getElementById("city").value;
+        var url = `http://api.weatherstack.com/current?access_key=02aee7fd5aed7f3acf3f6b9e15d883b0&query=${city}`;
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            var weatherData = document.getElementById("weather-data");
+            weatherData.innerHTML = `
+              <h2>${data.location.name}</h2>
+              <p>Temperature: ${data.current.temperature}°C</p>
+              <p>Weather Description: ${data.current.weather_descriptions[0]}</p>
+              <p>Wind Speed: ${data.current.wind_speed} km/h</p>
+              <p>Humidity: ${data.current.humidity}%</p>
+              <p>Cloud Cover: ${data.current.cloudcover}%</p>
+            `;
+          })
+          .catch(error => console.error(error));
+      }
+    </script>
+  </body>
+</html>
